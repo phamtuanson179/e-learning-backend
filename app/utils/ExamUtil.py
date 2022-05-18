@@ -9,6 +9,7 @@ class ExamUtil:
             min_point_to_pass=exam["min_point_to_pass"],
             duration=exam["duration"],
             created_by=exam["created_by"],
-            require_rooms=exam["require_room"],
-            questions=exam["question"]
+            image=exam["image"],
+            require_rooms=exam["require_rooms"],
+            questions=exam["questions"]
         )

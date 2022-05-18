@@ -7,4 +7,4 @@ class Question(BaseModel):
     type: int
     content: str
     url_file: Optional[str] = None
-    answer: List[Answer]
+    answers: List[Answer]
