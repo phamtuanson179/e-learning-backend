@@ -1,0 +1,9 @@
+# Environments
+venv/
+.venv/
+
+#pycache
+__pycache__/
+
+#note
+Elearning20220127.txt
