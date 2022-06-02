@@ -1,7 +1,7 @@
-database: 
+database:
   # url: mongodb://localhost:27017/
-  url: mongodb+srv://techpro-ai:123456aA@cluster0.kq0xr.mongodb.net/techpro-elearning?retryWrites=true&w=majority
-  name: techpro-elearning
+  url: mongodb://localhost:27017/
+  name: e-learning-app
 
 auth:
   secret_key: elearning_techpro

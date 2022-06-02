@@ -33,8 +33,8 @@ class ExamRepo(BaseRepo):
         else:
             return ExamUtil.format_exam(exams[0])
 
-    def get_exams_for_room(self, room):
-        exams = list(self.collection.find({"require_rooms": { "$in": [room] }}))
+    def get_exams_for_subject(self, subject):
+        exams = list(self.collection.find({"require_subjects": { "$in": [subject] }}))
         list_exams = []
         for record in exams:
             list_exams.append(ExamUtil.format_exam(record))

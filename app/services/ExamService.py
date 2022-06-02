@@ -1,10 +1,11 @@
 from hashlib import new
-import starlette.status
 import jwt
 from app.repositories.ExamRepo import ExamRepo
 from app.repositories.ResultRepo import ResultRepo
-from app.models.Exam import Exam, NewExam
-from app.models.Result import Result, NewResult, FullResult
+from app.models.Exam import Exam, ExamCreate
+from app.models.Result import Result
+from app.models.Exam import  ExamCreate
+
 from app.exceptions.CredentialException import CredentialException
 from app.exceptions.RequestException import RequestException
 from app.configs.Config import AuthConfig
@@ -18,16 +19,16 @@ class ExamService:
         self.__name__= "ExamService"
         self.repo = ExamRepo()
 
-    def create_exam(self, new_exam: NewExam, token):
+    def create_exam(self, exam_created: ExamCreate, token):
         payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
-        email: str = payload.get("email")
-        exam = Exam(name=new_exam.name, 
-                    min_point_to_pass=new_exam.min_point_to_pass,
-                    duration=new_exam.duration,
-                    require_rooms=new_exam.require_rooms,
-                    image=new_exam.image,
-                    questions=new_exam.questions,
-                    created_by=email)
+        username: str = payload.get("username")
+        exam = Exam(name=exam_created.name, 
+                    min_point_to_pass=exam_created.min_point_to_pass,
+                    duration=exam_created.duration,
+                    require_subjects=exam_created.require_subjects,
+                    image=exam_created.image,
+                    questions=exam_created.questions,
+                    created_by=username)
         res =  ExamRepo().create_exam(exam)
         return "Create exam success"
 
@@ -42,8 +43,8 @@ class ExamService:
             raise RequestException(message= "Exam not exists")
         return _u
 
-    def get_exams_for_room(self, room: str):
-        list_exams = self.repo.get_exams_for_room(room)
+    def get_exams_for_subject(self, subject: str):
+        list_exams = self.repo.get_exams_for_subject(subject)
         return list_exams
 
     def get_exam_history(self, user_id: str, exam_id: str):
@@ -54,18 +55,18 @@ class ExamService:
         list_result = ResultRepo().get_full_exam_ranking(exam_id)
         return list_result
 
-    def get_shortcut_exam_ranking(self, exam_id: str, token: str):
+    def get_summary_exam_ranking(self, exam_id: str, token: str):
         data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["email"])
-        list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.user_id)
+        user = UserService().get_user(data["username"])
+        list_result = ResultRepo().get_summary_exam_ranking(exam_id, user.user_id)
         return list_result
 
-    def save_result(self, new_result: NewResult, token: str):
+    def save_result(self, new_result: ExamCreate, token: str):
         exam = ExamRepo().get_exam(new_result.exam_id)
         data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["email"])
+        user = UserService().get_user(data["username"])
 
-        test_result = FullResult(user_id=user.user_id, 
+        test_result = Result(user_id=user.user_id, 
                                 exam_id=new_result.exam_id, 
                                 point=new_result.point, 
                                 max_point=len(exam.questions)*10, 
@@ -76,12 +77,12 @@ class ExamService:
         res =  ResultRepo().save_result(test_result)
         return "Save result success"
 
-    def save_img(self, new_result: NewResult, token: str):
+    def save_img(self, new_result: ExamCreate, token: str):
         exam = ExamRepo().get_exam(new_result.exam_id)
         data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["email"])
+        user = UserService().get_user(data["username"])
 
-        test_result = FullResult(user_id=user.user_id, 
+        test_result = Result(user_id=user.user_id, 
                                 exam_id=new_result.exam_id, 
                                 point=new_result.point, 
                                 max_point=len(exam.questions)*10, 

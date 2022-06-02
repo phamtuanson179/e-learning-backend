@@ -10,6 +10,6 @@ class ExamUtil:
             duration=exam["duration"],
             created_by=exam["created_by"],
             image=exam["image"],
-            require_rooms=exam["require_rooms"],
+            require_subjects=exam["require_subjects"],
             questions=exam["questions"]
         )

@@ -34,8 +34,8 @@ class UserRepo(BaseRepo):
             list_super_admins.append(UserUtil.format_info_user(record))
         return list_super_admins
 
-    def get_info_user(self, email):
-        users = list(self.collection.find({"email": email}))
+    def get_info_user(self, username):
+        users = list(self.collection.find({"username": username}))
         count = 0
         for record in users:
             count += 1
@@ -44,8 +44,8 @@ class UserRepo(BaseRepo):
         else:
             return UserUtil.format_info_user(users[0])
 
-    def get_token_by_email(self, email):
-        users = list(self.collection.find({"email": email}))
+    def get_token_by_username(self, username):
+        users = list(self.collection.find({"username": username}))
         count = 0
         for record in users:
             count += 1
@@ -54,18 +54,19 @@ class UserRepo(BaseRepo):
         else:
             return UserUtil.format_token(users[0])
         
-    def get_user_by_email(self, email):
-        users = list(self.collection.find({"email": email}))
+    def get_user_by_username(self, username):
+        users = list(self.collection.find({"username": username}))
         count = 0
         for record in users:
             count += 1
+            
         if count < 1:
             return None
         else:
-            return UserUtil.format_user(users[0])
+            return (UserUtil.format_user(users[0]) )
 
-    def get_users_in_room(self, room):
-        users = list(self.collection.find({"room": room}))
+    def get_users_in_subject(self, subject):
+        users = list(self.collection.find({"subject": subject}))
         list_users = []
         for record in users:
             list_users.append(UserUtil.format_info_user(record))
@@ -73,7 +74,7 @@ class UserRepo(BaseRepo):
 
     def update_admin(self, info: User):
         query = { "email": info.email}
-        value = { "room": info.room,
+        value = { "subject": info.subject,
                 "fullname": info.fullname,
                 "role": info.role,
                 "position": info.position,
@@ -83,8 +84,8 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, { "$set": value})
         return res
 
-    def update_token(self, email, token):
-        query = { "email": email}
+    def update_token(self, username, token):
+        query = { "username": username}
         value = { "token": token}
         res = self.collection.update_one(query, { "$set": value})
         return res
@@ -97,7 +98,7 @@ class UserRepo(BaseRepo):
 
     def update_user(self, info: User):
         query = { "email": info.email}
-        value = { "room": info.room,
+        value = { "subject": info.subject,
                 "fullname": info.fullname,
                 "position": info.position,
                 "date_of_birth": info.date_of_birth,

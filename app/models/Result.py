@@ -1,18 +1,22 @@
 from typing import Optional
 from pydantic import BaseModel
+from app.models.Exam import Exam
+
+from app.models.Subject import Subject
+from app.models.User import User
 
 
-class NewResult(BaseModel):
-    exam_id: str
+class ResultCreate(BaseModel):
+    subject: Subject
     point: int
     is_pass: bool
-    duration: int
+    time: int
+    user: User
+    exam: Exam
 
-class Result(NewResult):
+
+class Result(ResultCreate):
     id: Optional[str] = None
-    user_name: str
-    user_id: str
     max_point: int
-
-class FullResult(Result):
     create_at: str
+
