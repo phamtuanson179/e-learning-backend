@@ -1,9 +1,7 @@
 
-from app.utils.UserUtil import UserUtil, User
-from app.utils.ExamUtil import ExamUtil
-from app.models.Exam import Exam
-from .__init__ import *
-from app.configs.Config import RoleConfig
+from app.constants.type import ROLE
+from app.utils.user_util import UserUtil, User
+from . import *
 
 
 class UserRepo(BaseRepo):
@@ -21,14 +19,14 @@ class UserRepo(BaseRepo):
         return res
 
     def get_all_admin(self):
-        admins = list(self.collection.find({"role": RoleConfig.ROLE_ADMIN}))
+        admins = list(self.collection.find({"role": ROLE.ADMIN}))
         list_admins = []
         for record in admins:
             list_admins.append(UserUtil.format_info_user(record))
         return list_admins
 
     def get_all_super_admin(self):
-        admins = list(self.collection.find({"role": RoleConfig.ROLE_SUPERADMIN}))
+        admins = list(self.collection.find({"role": ROLE.SUPER_ADMIN}))
         list_super_admins = []
         for record in admins:
             list_super_admins.append(UserUtil.format_info_user(record))

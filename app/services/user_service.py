@@ -2,14 +2,12 @@ from fastapi import UploadFile
 import starlette.status
 import aiofiles
 import os
-from app.configs.Config import AuthConfig
-from app.repositories.UserRepo import UserRepo
-from app.repositories.ExamRepo import ExamRepo
-from app.models.User import UserCreate, User
+from app.constants.type import ROLE
+from app.repositories.user_repo import UserRepo
+from app.models.user import UserCreate, User
 from app.exceptions.CredentialException import CredentialException
-from app.utils.AuthUtil import AuthUtil
-from app.utils.TimeUtil import TimeUtil
-from app.configs.Config import RoleConfig
+from app.utils.auth_util import AuthUtil
+from app.utils.time_util import TimeUtil
 from fastapi.responses import FileResponse
 
 class UserService:
@@ -26,7 +24,7 @@ class UserService:
         print ('user_call_api',user_call_api)
         if not user_call_api:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
-        if(user_call_api.role == RoleConfig.ROLE_ADMIN or user_call_api.role == RoleConfig.ROLE_SUPERADMIN):
+        if(user_call_api.role == ROLE.ADMIN or user_call_api.role == ROLE.SUPER_ADMIN):
             print('true')
             return True
         # else:
@@ -38,7 +36,7 @@ class UserService:
         user_call_api = self.repo.get_user_by_username(username)
         if not user_call_api:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
-        if(user_call_api.role == RoleConfig.ROLE_SUPERADMIN):
+        if(user_call_api.role == ROLE.SUPER_ADMIN):
             return True
         else:
             return False

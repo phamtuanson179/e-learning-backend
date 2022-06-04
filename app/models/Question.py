@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from app.models.Subject import Subject
+from app.models.subject import Subject
 
 
 class Answer(BaseModel):

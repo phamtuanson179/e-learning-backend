@@ -1,10 +1,10 @@
 
-from app.utils.SubjectUtil import SubjectUtil
-from app.models.Subject import Subject
+from app.utils.subject_util import SubjectUtil
+from app.models.subject import Subject
 from . import *
 
 
-class subjectRepo(BaseRepo):
+class SubjectRepo(BaseRepo):
 
     def __init__(self, collection: str="subjects") -> None:
         super().__init__()
@@ -12,15 +12,14 @@ class subjectRepo(BaseRepo):
 
     def get_all_subject(self):
         subjects = list(self.collection.find({}))
-        print ('subject', subjects)
         list_subjects = []
         for record in subjects:
-            print(record)
             list_subjects.append(SubjectUtil.format_subject(record))
         return list_subjects
 
-    def get_subject(self, alias: str):
-        subjects = list(self.collection.find({"alias": alias}))
+    def get_subject(self, id: str):
+        subjects = list(self.collection.find({"_id": id}))
+        print('subjects',subjects)
         count = 0
         for record in subjects:
             count += 1

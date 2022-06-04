@@ -1,5 +1,5 @@
 
-from app.services.AuthService import AuthService
+from app.services.auth_service import AuthService
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 

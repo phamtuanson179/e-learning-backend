@@ -1,12 +1,10 @@
+from app.models.result import Result, ResultCreate
+from app.models.user import User
+from app.routes.auth_route import oauth2_scheme
+from app.services.auth_service import AuthService
+from app.services.user_service import UserService
+from fastapi import APIRouter, Depends, File, Header, UploadFile
 from fastapi.staticfiles import StaticFiles
-from fastapi import APIRouter, Depends, Header, File, UploadFile
-from app.services.UserService import UserService
-from app.services.AuthService import AuthService
-from app.models.User import User
-from app.services.ExamService import ExamService
-from app.models.User import User
-from app.models.Result import Result, ResultCreate
-from app.routes.account_route import oauth2_scheme
 
 router = APIRouter(prefix='/result')
 
@@ -30,9 +28,9 @@ router = APIRouter(prefix='/result')
 #         res = ExamService().get_summary_exam_ranking(exam_id, token)
 #         return res
 
-@router.post("/save_result")
-async def save_result(result: ResultCreate, token: str = Header(None)):
-    if AuthService().validate_token(token):
-        res = ExamService().save_result(result, token)
-        return res
+# @router.post("/save_result")
+# async def save_result(result: ResultCreate, token: str = Header(None)):
+#     if AuthService().validate_token(token):
+#         res = ExamService().save_result(result, token)
+#         return res
 

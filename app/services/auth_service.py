@@ -1,11 +1,10 @@
 import jwt
 from datetime import datetime
 
-from app.repositories.UserRepo import UserRepo
-from app.services.UserService import UserService
+from app.repositories.user_repo import UserRepo
+from app.services.user_service import UserService
 from app.exceptions.CredentialException import CredentialException
-from app.utils.AuthUtil import AuthUtil
-from app.configs.Config import AuthConfig
+from app.utils.auth_util import AuthUtil
 import string, random
 
 

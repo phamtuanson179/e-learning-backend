@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
-from app.models.Exam import Exam
+from app.models.question import Question, QuestionResponse
 
-from app.models.Subject import Subject
-from app.models.User import User
+from app.models.subject import Subject
+from app.models.user import User
 
 
 class ResultCreate(BaseModel):
@@ -12,7 +12,7 @@ class ResultCreate(BaseModel):
     is_pass: bool
     time: int
     user: User
-    exam: Exam
+    questions: List[Question]
 
 
 class Result(ResultCreate):

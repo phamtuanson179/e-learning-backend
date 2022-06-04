@@ -1,4 +1,4 @@
-from app.models.Result import Result
+from app.models.result import Result
 
 class ResultUtil:
 

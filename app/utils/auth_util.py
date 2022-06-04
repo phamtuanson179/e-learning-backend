@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from fastapi.security import HTTPBearer
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from app.configs.Config import AuthConfig
+from app.constants.type import AUTH
 
 class AuthUtil:
 
@@ -23,18 +23,21 @@ class AuthUtil:
         return AuthUtil.pwd_context.hash(password)
 
     def create_access_token(username:str)->str:
-        expires_delta = timedelta(minutes=AuthConfig.EXPIRE_MINUTES)
+        expires_delta = timedelta(minutes=AUTH.EXPIRE_MINUTES)
         expire_at = datetime.utcnow()+ expires_delta
         for_encode = {
             'username': username,
             'exp': expire_at
         } 
-        encode_jwt = jwt.encode(for_encode, key = AuthConfig.SECRET_KEY, algorithm = AuthConfig.ALGORITHM)
+        encode_jwt = jwt.encode(for_encode, key = AUTH.SECRET_KEY, algorithm = AUTH.ALGORITHM)
         return encode_jwt
 
     def decode_token(token: str):
-        payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
+        payload = jwt.decode(token, AUTH.SECRET_KEY, algorithms=AUTH.ALGORITHM)
         username: str = payload.get("username")
         exp = payload.get("exp")
         data = {"username": username, "exp": exp}
         return data
+
+
+

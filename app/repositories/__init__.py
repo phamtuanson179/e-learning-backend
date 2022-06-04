@@ -1,9 +1,9 @@
 import pymongo
-from app.configs.Config import DBConfig
+from app.constants.type import DB
 class BaseRepo:
     def __init__(self):
-        self.myclient = pymongo.MongoClient(DBConfig.DB_URL)
-        self.mydb = self.myclient[DBConfig.DB_NAME]
+        self.myclient = pymongo.MongoClient(DB.URL)
+        self.mydb = self.myclient[DB.NAME]
     #ket noi db o local
     # First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]

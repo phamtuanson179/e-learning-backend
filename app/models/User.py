@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from app.models.Subject import Subject
+from app.models.subject import Subject
 from pydantic import BaseModel
 
 

@@ -1,13 +1,13 @@
-from app.repositories.SubjectRepo import subjectRepo
-from app.models.Subject import Subject
+from app.repositories.subject_repo import SubjectRepo
+from app.models.subject import Subject
 from app.exceptions.RequestException import RequestException
 
 
-class subjectService:
+class SubjectService:
 
     def __init__(self):
         self.__name__= "ExamService"
-        self.repo = subjectRepo()
+        self.repo = SubjectRepo()
 
     def create_subject(self, new_subject: Subject):
         try:
@@ -23,17 +23,17 @@ class subjectService:
             raise RequestException(message="Get subjects fail!")
         return subjects
 
-    def get_subject(self, alias: str):
+    def get_subject(self, id: str):
         try:
-            subject = self.repo.get_subject(alias)
+            subject = self.repo.get_subject(id)
         except:
             raise RequestException(message="Get subjects fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")
         return subject
 
-    def update_subject(self, subject: Subject):
-        self.get_subject(subject.alias)
+    def update_subject(self,id:str, subject: Subject):
+        self.get_subject(id)
         try:
             self.repo.update_subject(subject)
         except:

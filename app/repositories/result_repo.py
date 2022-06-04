@@ -1,5 +1,5 @@
-from app.models.Result import Result
-from app.utils.ResultUtil import ResultUtil
+from app.models.result import Result
+from app.utils.result_util import ResultUtil
 from . import *
 
 
