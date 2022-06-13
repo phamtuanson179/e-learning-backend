@@ -54,6 +54,7 @@ class UserRepo(BaseRepo):
         
     def get_user_by_username(self, username):
         users = list(self.collection.find({"username": username}))
+        print('user',users)
         count = 0
         for record in users:
             count += 1

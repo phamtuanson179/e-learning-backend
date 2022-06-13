@@ -7,9 +7,13 @@ class BaseRepo:
     #ket noi db o local
     # First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]
-        # mydict = {"email": "test@gmail.com", "password": "123", "role": 2, "subject": "AI", "fullname": "Test User", "date_of_birth": "01-01-1999", "url_avatar": "", "token": "", "username": "admin","subject": "",}
+        # mydict = {"email": "test@gmail.com", "password": "admin", "role": "SUPER_ADMIN", "subject": None, "fullname": "Test User", "dob": "01-01-1999", "url_avatar": "", "token": "", "username": "admin","subject": "",}
         # x = self.collection.insert_one(mydict)
 
+    
+    
+    
+    
     #print list db
         # print(self.myclient['e-learning-app'].list_collection_names())\
     

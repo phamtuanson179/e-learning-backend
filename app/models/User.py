@@ -8,10 +8,10 @@ class UserCreate(BaseModel):
     username:str
     password: str
     email: str
-    subject: Optional[List[Subject]]
-    role: int
+    role: str
     fullname: str
     dob: str
+    subjects: Optional[List[Subject]]
     url_avatar: Optional[str] 
     token: Optional[str] = None
 

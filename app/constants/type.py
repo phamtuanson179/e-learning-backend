@@ -1,10 +1,10 @@
 class ROLE: 
-    SUPER_ADMIN = 'SUPER ADMIN'
+    SUPER_ADMIN = 'SUPER ADMIN' 
     ADMIN = 'ADMIN'
     MEMBER = 'MEMBER'
 
 class DB:
-    URL = 'mongodb://localhost:27017/'
+    URL = 'mongodb://localhost:27017'
     NAME = 'e-learning-app'
 
 class AUTH:
