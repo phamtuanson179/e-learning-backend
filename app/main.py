@@ -23,7 +23,7 @@ app.include_router(auth_route.router)
 app.include_router(result_route.router)
 app.include_router(subject_route.router)
 app.include_router(user_route.router)
-# app.include_router(question_route.router)
+app.include_router(question_route.router)
 
 app.mount("/assets/image", StaticFiles(directory="assets/image/"), name="static")
 
