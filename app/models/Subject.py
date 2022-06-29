@@ -3,10 +3,7 @@ from pydantic import BaseModel, Field
 from bson import ObjectId
 from app.models.PyObjectId import PyObjectId
 from app.constants.type import GENERATE_EXAM_TYPE
-# from bson import ObjectId
-# from pydantic import BaseModel, Field, EmailStr
 from fastapi.encoders import jsonable_encoder
-# from models.PyObjectId import PyObjectId
 from typing import Optional, List
 
 
