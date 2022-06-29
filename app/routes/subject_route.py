@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends
 from app.services.auth_service import AuthService
 from app.services.subject_service import SubjectService
 from app.models.Subject import  SubjectCreate, UpdateSubjectModel
