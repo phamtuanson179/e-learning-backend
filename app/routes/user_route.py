@@ -5,8 +5,8 @@ from app.constants.type import ROLE
 from app.exceptions import CredentialException
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
-from app.models.user import UserCreate, User
-from app.models.user import User
+from app.models.User import UserCreate, User
+from app.models.User import User
 from app.routes.auth_route import oauth2_scheme
 
 router = APIRouter(prefix='/user')

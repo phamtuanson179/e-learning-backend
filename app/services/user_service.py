@@ -4,7 +4,7 @@ import aiofiles
 import os
 from app.constants.type import ROLE
 from app.repositories.user_repo import UserRepo
-from app.models.user import UserCreate, User
+from app.models.User import UserCreate, User
 from app.exceptions.CredentialException import CredentialException
 from app.utils.auth_util import AuthUtil
 from app.utils.time_util import TimeUtil

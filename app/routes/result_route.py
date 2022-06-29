@@ -1,5 +1,5 @@
-from app.models.result import Result, ResultCreate
-from app.models.user import User
+from app.models.Result import Result, ResultCreate
+from app.models.User import User
 from app.routes.auth_route import oauth2_scheme
 from app.services.auth_service import AuthService
 from app.services.user_service import UserService

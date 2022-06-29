@@ -1,7 +1,12 @@
-from app.repositories import subject_repo
+from app.repositories import question_repo
+from app.models.Question import QuestionCreate
 
 
-class questionService: 
+class QuestionService: 
     def __init__(self):
         self.__name__= "ExamService"
-        self.repo = subject_repo()
+        self.repo = question_repo.QuestionRepo()
+
+    def create_ques(self, new_ques: QuestionCreate):
+        res = self.repo.create_question(new_ques)
+        return res

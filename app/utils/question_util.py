@@ -1,5 +1,5 @@
-from app.models.question import Question
-from app.models.subject import Subject
+from app.models.Question import Question
+from app.models.Subject import SubjectCreate
 
 class QuestionUtil:
 

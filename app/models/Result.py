@@ -1,13 +1,13 @@
 from typing import List, Optional
 from pydantic import BaseModel
-from app.models.question import Question, QuestionResponse
+from app.models.Question import Question, QuestionResponse
 
-from app.models.subject import Subject
-from app.models.user import User
+from app.models.Subject import SubjectCreate
+from app.models.User import User
 
 
 class ResultCreate(BaseModel):
-    subject: Subject
+    subject: SubjectCreate
     point: int
     is_pass: bool
     time: int

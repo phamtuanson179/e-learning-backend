@@ -1,5 +1,5 @@
-from app.models.account import AccessToken
-from app.models.user import User
+from app.models.Account import AccessToken
+from app.models.User import User
 
 class UserUtil:
 

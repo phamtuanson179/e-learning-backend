@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from app.models.subject import Subject
+from app.models.Subject import SubjectCreate
 
 
 class Answer(BaseModel):
@@ -11,7 +11,7 @@ class Answer(BaseModel):
 class QuestionCreate(BaseModel):
     type: int
     title: str
-    subject: Subject
+    subject: SubjectCreate
     url_file: Optional[str] = None
     answers: List[Answer]
 

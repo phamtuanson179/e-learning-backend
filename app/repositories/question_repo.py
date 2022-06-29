@@ -1,6 +1,6 @@
 from app.repositories import BaseRepo
 from app.utils.question_util import QuestionUtil
-
+from app.models.Question import QuestionCreate
 
 class QuestionRepo(BaseRepo):
     def __init__(self, collection:str="questions")-> None:
@@ -12,3 +12,9 @@ class QuestionRepo(BaseRepo):
         list_questions = []
         for record in questions:
             list_questions.append(QuestionUtil.format_question(record))
+    
+    #create ques
+    def create_question(self, question: QuestionCreate):
+        res = self.collection.insert_one(question)
+        return res
+        

@@ -15,7 +15,7 @@ class BaseRepo:
     
     
     #print list db
-        # print(self.myclient['e-learning-app'].list_collection_names())\
+        # print(self.myclient['e-learning-app'].list_collection_names())
     
     #delete db
         # self.myclient.drop_database("techpro_elearning")
