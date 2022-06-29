@@ -3,8 +3,7 @@ from pydantic import BaseModel, Field
 from bson import ObjectId
 from app.models.PyObjectId import PyObjectId
 from app.constants.type import GENERATE_EXAM_TYPE
-from fastapi.encoders import jsonable_encoder
-from typing import Optional, List
+from typing import Optional
 
 
 class SubjectCreate(BaseModel):
