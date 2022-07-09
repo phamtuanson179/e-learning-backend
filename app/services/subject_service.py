@@ -1,7 +1,7 @@
 from app.repositories.subject_repo import SubjectRepo
-from app.models.Subject import SubjectCreate, UpdateSubjectModel
+from app.models.Subject import Subject
 from app.exceptions.RequestException import RequestException
-from fastapi import Body 
+
 
 class SubjectService:
 
@@ -9,14 +9,12 @@ class SubjectService:
         self.__name__= "ExamService"
         self.repo = SubjectRepo()
 
-    def create_subject(self, new_subject: SubjectCreate = Body(...)):
+    def create_subject(self, new_subject: Subject):
         try:
             res =  self.repo.create_subject(new_subject)
-            return res
         except:
             raise RequestException(message="Create subject fail!")
         return "Success"
-        # return res
 
     def get_all_subject(self):
         try:
@@ -25,29 +23,28 @@ class SubjectService:
             raise RequestException(message="Get subjects fail!")
         return subjects
 
-    def get_subject(self, id: str):
+    def get_subject_by_id(self, id: str):
         try:
-            subject = self.repo.get_subject(id)
+            subject = self.repo.get_subject_by_id(id)
         except:
             raise RequestException(message="Get subjects fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")
         return subject
 
-    def update_subject(self,id:str, subject: UpdateSubjectModel = Body(...)):
+    def update_subject(self,id: str, subject: Subject):
         try:
-            res = self.repo.update_subject(id, subject)
-            return res
+            self.repo.update_subject(id,subject)
         except:
             raise RequestException(message="Update subject fail!")
         return "Success"
 
-    def delete_subject(self, id: str):
+    def delete_subject(self, alias: str):
         try:
-            subject = self.repo.get_subject(id)
+            subject = self.repo.get_subject(alias)
         except:
             raise RequestException(message="Fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")
-        res = self.repo.delete_subject(id)
+        res = self.repo.delete_subject(alias)
         return "Delete success"

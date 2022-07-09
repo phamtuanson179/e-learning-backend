@@ -1,7 +1,8 @@
 
-from app.constants.type import ROLE
+from time import clock_getres
 from app.utils.user_util import UserUtil, User
 from . import *
+from app.configs.Config import RoleConfig
 
 
 class UserRepo(BaseRepo):
@@ -19,21 +20,21 @@ class UserRepo(BaseRepo):
         return res
 
     def get_all_admin(self):
-        admins = list(self.collection.find({"role": ROLE.ADMIN}))
+        admins = list(self.collection.find({"role": RoleConfig.ROLE_ADMIN}))
         list_admins = []
         for record in admins:
             list_admins.append(UserUtil.format_info_user(record))
         return list_admins
 
     def get_all_super_admin(self):
-        admins = list(self.collection.find({"role": ROLE.SUPER_ADMIN}))
+        admins = list(self.collection.find({"role": RoleConfig.ROLE_SUPERADMIN}))
         list_super_admins = []
         for record in admins:
             list_super_admins.append(UserUtil.format_info_user(record))
         return list_super_admins
 
-    def get_info_user(self, username):
-        users = list(self.collection.find({"username": username}))
+    def get_info_user(self, email):
+        users = list(self.collection.find({"email": email}))
         count = 0
         for record in users:
             count += 1
@@ -43,26 +44,28 @@ class UserRepo(BaseRepo):
             return UserUtil.format_info_user(users[0])
 
     def get_token_by_username(self, username):
-        users = list(self.collection.find({"username": username}))
-        count = 0
-        for record in users:
-            count += 1
-        if count < 1:
+        user = self.collection.find_one({"username": username})
+        if not user:
             return None
         else:
-            return UserUtil.format_token(users[0])
+            return UserUtil.format_token(user)
         
-    def get_user_by_username(self, username):
-        users = list(self.collection.find({"username": username}))
-        print('user',users)
+    def get_user_by_email(self, email):
+        users = list(self.collection.find({"email": email}))
         count = 0
         for record in users:
             count += 1
-            
         if count < 1:
             return None
         else:
-            return (UserUtil.format_user(users[0]) )
+            return UserUtil.format_user(users[0])
+
+    def get_user_by_username(self, username):
+        user = self.collection.find_one({"username": username})
+        if not user:
+            return None
+        else:
+            return UserUtil.format_user(user)
 
     def get_users_in_subject(self, subject):
         users = list(self.collection.find({"subject": subject}))

@@ -1,5 +1,5 @@
-from app.models.Account import AccessToken
 from app.models.User import User
+from app.models.Auth import AccessToken
 
 class UserUtil:
 
@@ -12,8 +12,7 @@ class UserUtil:
             fullname=user["fullname"],
             position=user["position"],
             date_of_birth=user["date_of_birth"],
-            url_avatar=user["url_avatar"],
-            username=user["username"]
+            url_avatar=user["url_avatar"]
         )
 
     def format_token(user) -> AccessToken:
@@ -28,10 +27,10 @@ class UserUtil:
             email=user["email"],
             password=user["password"],
             role=user["role"],
-            subject=user["subject"],
+            list_subjects_id=user["list_subjects_id"],
             fullname=user["fullname"],
             dob=user["dob"],
-            url_avatar=user["url_avatar"],
+            avatar=user["avatar"],
             token=user["token"],
             username=user["username"]
         )

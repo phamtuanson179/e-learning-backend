@@ -1,17 +1,15 @@
 from typing import List, Optional
 from pydantic import BaseModel
-from app.models.Question import Question, QuestionResponse
 
-from app.models.Subject import SubjectCreate
-from app.models.User import User
+from app.models.Question import Question
 
 
 class ResultCreate(BaseModel):
-    subject: SubjectCreate
+    subject_id: str 
     point: int
     is_pass: bool
     time: int
-    user: User
+    user_id: str
     questions: List[Question]
 
 
@@ -19,4 +17,3 @@ class Result(ResultCreate):
     id: Optional[str] = None
     max_point: int
     create_at: str
-

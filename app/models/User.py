@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-from app.models.Subject import SubjectCreate
 from pydantic import BaseModel
 
 
@@ -11,11 +10,9 @@ class UserCreate(BaseModel):
     role: str
     fullname: str
     dob: str
-    subjects: Optional[List[SubjectCreate]]
-    url_avatar: Optional[str] 
+    list_subjects_id: Optional[List[str]]
+    avatar: Optional[str] 
     token: Optional[str] = None
 
-class UserResponse(UserCreate): 
+class User(UserCreate):
     id: str
-class User(UserResponse):
-    pass

@@ -27,7 +27,7 @@ class ResultRepo(BaseRepo):
             list_result.append(ResultUtil.format_result(result))
         return list_result
 
-    def get_summary_exam_ranking(self, exam_id, user_id):
+    def get_shortcut_exam_ranking(self, exam_id, user_id):
         res = self.collection.aggregate([
             {"$match": {"exam_id":  exam_id}},
             {"$group": {"_id": '$user_id',"user_id": { "$first": "$user_id" }, "exam_id": { "$first": "$exam_id" }, 'point': {"$max": '$point'}, "duration": { "$first": "$duration"}, "max_point": { "$first": "$max_point"}, "is_pass": { "$first": "$is_pass"}, "user_name": { "$first": "$user_name"}}},

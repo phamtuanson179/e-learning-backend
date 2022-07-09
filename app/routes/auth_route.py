@@ -1,23 +1,17 @@
+from fastapi import APIRouter
 
 from app.services.auth_service import AuthService
-from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
-
 @router.post("/login")
-# async def login(account : Account):
-#     print (account.email, account.password)
-#     res = await AuthService().authenticate_user(account.email, account.password)
-#     print (res)
-#     return res
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     res = await AuthService().authenticate_user(form_data.username, form_data.password)
     return res
-
 
 # @router.post("/forgot-password")
 # async def forgot_password(request: ForgotPassword):

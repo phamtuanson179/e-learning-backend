@@ -11,9 +11,7 @@ class ResultUtil:
             max_point=result["max_point"],
             user_name=result["user_name"],
             is_pass=result["is_pass"],
-            time=result["time"],
-            create_at=result["create_at"]
-
+            duration=result["duration"]
         )
     
   

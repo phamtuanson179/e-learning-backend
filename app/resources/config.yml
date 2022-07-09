@@ -1,3 +1,14 @@
+database: 
+  # url: mongodb://localhost:27017/
+  url: mongodb+srv://techpro-ai:123456aA@cluster0.kq0xr.mongodb.net/techpro-elearning?retryWrites=true&w=majority
+  name: techpro-elearning
+
+auth:
+  secret_key: elearning_techpro
+  algorithm: HS256
+  expire_minutes: 540
+#540mins = 9hours = 8 work hours + 1 relax hour
+
 mail:
   mail_username: elearningtechpro@gmail.com
   mail_password: Elearning2022

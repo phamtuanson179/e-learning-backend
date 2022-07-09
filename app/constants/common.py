@@ -1,7 +1,7 @@
 class ROLE: 
-    SUPER_ADMIN = 'SUPER ADMIN' 
-    ADMIN = 'ADMIN'
-    MEMBER = 'MEMBER'
+    ADMIN = 'ADMIN' 
+    TEACHER = 'TEACHER'
+    STUDENT = 'STUDENT'
 
 class DB:
     URL = 'mongodb://localhost:27017'
