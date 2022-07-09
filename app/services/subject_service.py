@@ -39,12 +39,12 @@ class SubjectService:
             raise RequestException(message="Update subject fail!")
         return "Success"
 
-    def delete_subject(self, alias: str):
+    def delete_subject(self, id: str):
         try:
-            subject = self.repo.get_subject(alias)
+            subject = self.repo.get_subject_by_id(id)
         except:
             raise RequestException(message="Fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")
-        res = self.repo.delete_subject(alias)
+        res = self.repo.delete_subject(id)
         return "Delete success"

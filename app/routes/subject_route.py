@@ -31,7 +31,7 @@ async def update_subject(id: str, subject: Subject, token: str = Depends(oauth2_
         return res
 
 @router.delete("/delete")
-async def delete_subject(alias: str, token: str = Depends(oauth2_scheme)):
+async def delete_subject(id: str, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
-        res = SubjectService().delete_subject(alias)
+        res = SubjectService().delete_subject(id)
         return res

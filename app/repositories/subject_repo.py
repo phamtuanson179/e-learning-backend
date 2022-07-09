@@ -29,8 +29,8 @@ class SubjectRepo(BaseRepo):
         res = self.collection.insert_one(subject.__dict__)
         return res
 
-    def delete_subject(self, alias: str):
-        res = self.collection.delete_one({"alias": alias})
+    def delete_subject(self, id: str):
+        res = self.collection.delete_one({"_id": ObjectId(id)})
         return res
 
     def update_subject(self, id:str,subject: Subject):
