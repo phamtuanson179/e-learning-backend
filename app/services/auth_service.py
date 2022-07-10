@@ -59,6 +59,26 @@ class AuthService:
             raise CredentialException(message="UNAUTHORIZED")
         return True
 
+    def about_me(self,token:str):
+        try:
+            decoded_token = AuthUtil.decode_token(token)
+            username = decoded_token["username"]
+            user = self.repo.get_user_by_username(username)
+
+            print(user)
+            if not user:
+                raise CredentialException(message="Lỗi hệ thống")
+            else:
+                if hasattr(user, 'password'):
+                    delattr(user,'password')
+                if hasattr(user, 'token'):
+                    delattr(user,'token')
+                return user
+        except Exception as e:
+            raise CredentialException(message="Lỗi hệ thống")
+            
+    
+
     def change_password(self, email: str, password: str):
         access_token = AuthUtil.create_access_token(email)
         reset_token = self.repo.update_token(email, access_token)

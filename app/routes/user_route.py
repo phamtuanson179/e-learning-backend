@@ -20,20 +20,26 @@ async def get_user(email: str, token: str = Depends(oauth2_scheme)):
 
 @router.post("/create")
 async def create_user(new_user: UserCreate, token: str = Depends(oauth2_scheme)):
-    # if AuthService().validate_token(token):
-        # if (new_user.role == ROLE.ADMIN):
-        #     if not UserService().is_admin(token):
-        #         raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        # elif not (UserService().is_admin(token) or  UserService().is_teacher(token)) :
-        #     raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+    if AuthService().validate_token(token):
+        if (new_user.role == ROLE.ADMIN):
+            if not UserService().is_admin(token):
+                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        elif not (UserService().is_admin(token) or  UserService().is_teacher(token)) :
+            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
     res = UserService().create_user(new_user)
     return res
 
 
 @router.put("/update")
-async def update_user(info: User, token: str = Depends(oauth2_scheme)):
+async def update_user(data: User, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
-        res = UserService().update_user(info, token)
+        res = UserService().update_user(data, token)
+        return res
+
+@router.put("/update-me")
+async def update_user(data: User, token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = UserService().update_me(data, token)
         return res
 
 @router.delete("/delete")

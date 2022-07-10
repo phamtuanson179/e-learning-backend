@@ -3,6 +3,7 @@ from time import clock_getres
 from app.utils.user_util import UserUtil, User
 from . import *
 from app.configs.Config import RoleConfig
+from bson.objectid import ObjectId
 
 
 class UserRepo(BaseRepo):
@@ -98,13 +99,6 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, {"$set": value})
         return res
 
-    def update_user(self, info: User):
-        query = { "email": info.email}
-        value = { "subject": info.subject,
-                "fullname": info.fullname,
-                "position": info.position,
-                "date_of_birth": info.date_of_birth,
-                "url_avatar": info.url_avatar
-                }
-        res = self.collection.update_one(query, { "$set": value})
+    def update_user(self,id:str, user: User):
+        res = self.collection.update_one({"_id":ObjectId(id)}, { "$set": user.__dict__})
         return res
