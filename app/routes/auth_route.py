@@ -13,6 +13,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     res = await AuthService().authenticate_user(form_data.username, form_data.password)
     return res
 
+@router.get("/about-me")
+async def about_me(token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = AuthService().about_me(token)
+        return res
+
 # @router.post("/forgot-password")
 # async def forgot_password(request: ForgotPassword):
 #     res = await AuthService().handle_forgot_password(request.email)
