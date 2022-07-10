@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status 
 import starlette
 from app.configs.Config import RoleConfig
 from app.constants.common import ROLE
@@ -40,6 +40,6 @@ async def update_user(info: User, token: str = Depends(oauth2_scheme)):
 async def delete_user(email: str, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
         if not UserService().check_admin_permission(token):
-            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+            raise CredentialException(status_code=status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
         res = UserService().delete_user(email)
         return res

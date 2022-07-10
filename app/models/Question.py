@@ -3,10 +3,10 @@ from pydantic import BaseModel
 
 from app.models.Answer import Answer
 
-class Answer(BaseModel):
-    content: str
-    is_correct: bool
-    url_file: Optional[str] = None
+# class Answer(BaseModel):
+#     content: str
+#     is_correct: bool
+#     url_file: Optional[str] = None
 
 class QuestionCreate(BaseModel):
     type: int

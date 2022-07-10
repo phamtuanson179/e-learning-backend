@@ -1,5 +1,5 @@
 
-from time import clock_getres
+# from time import clock_getres
 from app.utils.user_util import UserUtil, User
 from . import *
 from app.configs.Config import RoleConfig
@@ -67,8 +67,8 @@ class UserRepo(BaseRepo):
         else:
             return UserUtil.format_user(user)
 
-    def get_users_in_subject(self, subject):
-        users = list(self.collection.find({"subject": subject}))
+    def get_users_in_subject(self, id_subject):
+        users = list(self.collection.find({"list_subjects_id": id_subject}))
         list_users = []
         for record in users:
             list_users.append(UserUtil.format_info_user(record))

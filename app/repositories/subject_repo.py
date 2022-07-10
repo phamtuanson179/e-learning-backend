@@ -34,7 +34,7 @@ class SubjectRepo(BaseRepo):
         return res
 
     def update_subject(self, id:str,subject: Subject):
-        print(id,subject)
+        # print(id,subject)
         res = self.collection.find_one_and_update({"_id": ObjectId(id)},{"$set": subject.__dict__})
         # subject = self.collection.find_one({"_id": ObjectId(id)})
 
