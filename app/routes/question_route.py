@@ -44,4 +44,9 @@ async def delete_question(id: str, token: str = Depends(oauth2_scheme)):
         res = QuestionService().delete_question(id)
         return res
 
+@router.get('/get-random-questions')
+async def get_question_random(id: str, token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = QuestionService().get_question_random(id)
+        return res
 

@@ -46,10 +46,14 @@ class ExamService:
         return list_result
 
     def save_result(self, new_result: ResultCreate, token: str):
-        exam = ExamRepo().get_exam(new_result.exam_id)
-        data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["email"])
-        return "Save result success"
+        try:
+            # exam = ExamRepo().get_exam(new_result.subject_id)
+            # data = AuthUtil.decode_token(token)
+            # user = UserService().get_user(data["email"])
+            result = ResultRepo().save_result(new_result)
+            return "Save result success"
+        except:
+            raise RequestException(message="save results fail")
 
    
     def update_exam(self, exam):

@@ -4,12 +4,14 @@ from app.models.Answer import Answer
 from bson.objectid import ObjectId
 from fastapi.encoders import jsonable_encoder
 from fastapi import Body
+import random
 from . import *
 
 class QuestionRepo(BaseRepo):
     def __init__(self, collection: str="questions") -> None:
         super().__init__()
         self.collection = self.mydb[collection]
+        self.subcollection = self.mydb["subjects"]
     
     def create_question(self, question: Question):
             new_ques = jsonable_encoder(question.__dict__)
@@ -43,5 +45,15 @@ class QuestionRepo(BaseRepo):
     
     def get_question_by_subject(self, id_subject: str):
         res = list(self.collection.find({"subject_id": id_subject}))
+        # subj = self.subcollection.find({"id": id_subject})
+
         list1 = [QuestionUtil.format_question(response) for response in res]
         return list1
+
+    def get_question_random(self, id_subject: str):
+        res = list(self.collection.find({"subject_id": id_subject}))
+        subj = self.subcollection.find_one({"id": id_subject})
+        num = int(subj['amount_question'])
+        list1 = [QuestionUtil.format_question(response) for response in res]
+        list2 = random.sample(list1, num)
+        return list2

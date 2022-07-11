@@ -1,6 +1,7 @@
 from app.models.Result import Result
 from app.utils.result_util import ResultUtil
 from . import *
+from fastapi.encoders import jsonable_encoder
 
 
 class ResultRepo(BaseRepo):
@@ -47,5 +48,6 @@ class ResultRepo(BaseRepo):
         return list_result
 
     def save_result(self, testResult: Result):
-        res = self.collection.insert_one(testResult.__dict__)
-        return res
+        saveResult = jsonable_encoder(testResult.__dict__)
+        res = self.collection.insert_one(saveResult)
+        return 'Saved Successfully'

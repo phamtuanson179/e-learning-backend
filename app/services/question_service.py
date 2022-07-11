@@ -51,3 +51,10 @@ class QuestionService:
             return res
         except: 
             raise RequestException(message="get question failed")
+        
+    def get_question_random(self, id_subject: str):
+        try: 
+            res = self.repo.get_question_random(id_subject)
+            return res
+        except: 
+            raise RequestException(message="get question failed")

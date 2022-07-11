@@ -92,21 +92,13 @@ class UserService:
         res = self.repo.update_admin(info)
         return "Update success"
 
-    def update_user(self, user: User, token: str):
+    def update_user(self, info: User, token: str):
         data = AuthUtil.decode_token(token)
-        username: str = data["username"]
-        if(username != user.username):
-            raise CredentialException(message= "Lỗi hệ thống!")
-        res = self.repo.update_user(user)
-        return "Update success"
-
-    def update_me(self, user: User, token: str):
-        data = AuthUtil.decode_token(token)
-        username: str = data["username"]
-        print(user)
-        if(username != user.username):
-            raise CredentialException(message= "Lỗi hệ thống!")
-        res = self.repo.update_user(user.id,user)
+        email: str = data["email"]
+        if(email != info.email):
+            if not self.check_admin_permission(token):
+                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        res = self.repo.update_user(info)
         return "Update success"
 
     async def upload_file(self, file: UploadFile):
