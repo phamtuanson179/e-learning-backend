@@ -13,6 +13,8 @@ from app.utils.TimeUtil import TimeUtil
 from app.configs.Config import RoleConfig
 from app.utils.user_util import UserUtil
 from fastapi.responses import FileResponse
+# from fastapi.encoders import jsonable_encoder
+
 
 class UserService:
     
@@ -35,6 +37,7 @@ class UserService:
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
         cur_user = self.repo.get_token_by_username(username)
+        
         if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
         if(cur_user.role == ROLE.ADMIN):
@@ -46,6 +49,7 @@ class UserService:
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
         cur_user = self.repo.get_token_by_username(username)
+        print(cur_user)
         if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
         if(cur_user.role == ROLE.TEACHER):
@@ -78,8 +82,8 @@ class UserService:
         list_super_admins = self.repo.get_all_super_admin()
         return list_super_admins
 
-    def get_user(self, email: str):
-        _u = self.repo.get_info_user(email)
+    def get_user(self, username: str):
+        _u = self.repo.get_info_user(username)
         if not _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User not exists")
         return _u

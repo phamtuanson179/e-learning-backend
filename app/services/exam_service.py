@@ -1,7 +1,7 @@
 from hashlib import new
 from app.repositories.exam_repo import ExamRepo
 from app.repositories.result_repo import ResultRepo
-from app.models.Result import ResultCreate
+from app.models.Result import Result
 from app.exceptions.RequestException import RequestException
 from app.utils.auth_util import AuthUtil
 from app.utils.TimeUtil import TimeUtil
@@ -31,8 +31,8 @@ class ExamService:
         list_exams = self.repo.get_exams_for_subject(subject)
         return list_exams
 
-    def get_exam_history(self, user_id: str, exam_id: str):
-        list_history = ResultRepo().get_exam_history(user_id, exam_id)
+    def get_exam_history(self, user_id: str, subject_id: str):
+        list_history = ResultRepo().get_exam_history(user_id, subject_id)
         return list_history
 
     def get_full_exam_ranking(self, exam_id: str):
@@ -41,18 +41,22 @@ class ExamService:
 
     def get_shortcut_exam_ranking(self, exam_id: str, token: str):
         data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["email"])
-        list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.user_id)
+        # print(data)
+        user = UserService().get_user(data["username"])
+        # print(user)
+        list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.id)
         return list_result
 
-    def save_result(self, new_result: ResultCreate, token: str):
+    def save_result(self, new_result: Result, token: str):
         try:
             # exam = ExamRepo().get_exam(new_result.subject_id)
             # data = AuthUtil.decode_token(token)
             # user = UserService().get_user(data["email"])
+            print(new_result)
             result = ResultRepo().save_result(new_result)
             return "Save result success"
-        except:
+        except Exception as e:
+            print(e)
             raise RequestException(message="save results fail")
 
    

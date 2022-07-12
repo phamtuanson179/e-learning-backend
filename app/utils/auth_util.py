@@ -31,6 +31,7 @@ class AuthUtil:
 
     def decode_token(token: str):
         payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
+        # print(payload)
         username = payload.get("username")
         exp = payload.get("exp")
         return {"username": username, "exp": exp}

@@ -9,6 +9,7 @@ class Account(BaseModel):
 class AccessToken(BaseModel):
     username: str
     token: str
+    role: str
 
 class ForgotPassword(BaseModel):
     email: str

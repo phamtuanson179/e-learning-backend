@@ -14,6 +14,6 @@ class ResultCreate(BaseModel):
 
 
 class Result(ResultCreate):
-    id: Optional[str] = None
+    # id: Optional[str] = None
     max_point: int
     create_at: str

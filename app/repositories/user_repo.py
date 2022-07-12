@@ -34,15 +34,15 @@ class UserRepo(BaseRepo):
             list_super_admins.append(UserUtil.format_info_user(record))
         return list_super_admins
 
-    def get_info_user(self, email):
-        users = list(self.collection.find({"email": email}))
+    def get_info_user(self, username):
+        users = list(self.collection.find({"username": username}))
         count = 0
         for record in users:
             count += 1
         if count < 1:
             return None
         else:
-            return UserUtil.format_info_user(users[0])
+            return UserUtil.format_user(users[0])
 
     def get_token_by_username(self, username):
         user = self.collection.find_one({"username": username})

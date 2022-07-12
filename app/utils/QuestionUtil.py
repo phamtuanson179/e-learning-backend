@@ -14,4 +14,13 @@ class QuestionUtil:
 
         )
 
+    def format_question_2(question):
+        return {
+            "type": str(question['type']),
+            "title": question['title'],
+            "subject_id": question['subject_id'],
+            "url_file": question['url_file'],
+            "answers": [AnswerUtil.format_answer(answer) for answer in question['answers']],
+            "id": question['id'],
+        }
 
