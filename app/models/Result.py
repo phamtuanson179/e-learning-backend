@@ -1,19 +1,19 @@
+from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel
 
-from app.models.Question import Question
+from app.models.Question import Question, QuestionHaveAnswer
 
 
 class ResultCreate(BaseModel):
+    created_at: int
     subject_id: str 
     point: int
     is_pass: bool
     time: int
     user_id: str
-    questions: List[Question]
+    questions: List[QuestionHaveAnswer]
 
 
 class Result(ResultCreate):
-    # id: Optional[str] = None
-    max_point: int
-    create_at: str
+    id: Optional[str] = None

@@ -52,9 +52,9 @@ class QuestionService:
         except: 
             raise RequestException(message="get question failed")
         
-    def get_question_random(self, id_subject: str):
+    def get_question_random(self, subject_id: str):
         try: 
-            res = self.repo.get_question_random(id_subject)
+            res = self.repo.get_question_random(subject_id)
             return res
         except: 
             raise RequestException(message="get question failed")

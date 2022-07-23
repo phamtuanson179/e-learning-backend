@@ -1,6 +1,7 @@
 
 from app.utils.subject_util import SubjectUtil
-from app.models.Subject import Subject
+from app.repositories.user_repo import UserRepo
+from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
 from bson.objectid import ObjectId
 from . import *
 
@@ -25,7 +26,18 @@ class SubjectRepo(BaseRepo):
         else:
             return SubjectUtil.format_subject(subject)
 
-    def create_subject(self, subject: Subject):
+    def get_subject_for_user(self, user_id: str):
+        user = UserRepo.get_user_by_id(id)
+        subjects = []
+        for subject_id in user.list_subjects_id:
+            subject = self.collection.find_one({"_id": ObjectId(subject_id)})
+            subjects.append(SubjectUtil.format_subject(subject))
+        if not subjects:
+            return None
+        else:
+            return subjects
+
+    def create_subject(self, subject: SubjectCreate):
         res = self.collection.insert_one(subject.__dict__)
         return res
 
@@ -33,7 +45,6 @@ class SubjectRepo(BaseRepo):
         res = self.collection.delete_one({"_id": ObjectId(id)})
         return res
 
-    def update_subject(self, id:str,subject: Subject):
-        # print(id,subject)
-        res = self.collection.find_one_and_update({"_id": ObjectId(id)},{"$set": subject.__dict__})
+    def update_subject(self, id:str,subject: SubjectUpdate):
+        res = self.collection.update_one({"_id": ObjectId(id)},{"$set": SubjectUtil.format_subject_for_update(subject).__dict__})
         return res

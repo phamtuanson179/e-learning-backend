@@ -8,5 +8,5 @@ class BaseRepo:
 
     # First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]
-        # mydict = {"email": "admin@gmail.com", "password": "admin", "role": "ADMIN", "subject": None, "fullname": "Test User", "dob": "01-01-1999", "avatar": "", "token": "", "username": "admin","list_subjects_id": [],}
+        # mydict = {"email": "admin@gmail.com", "password": "admin", "role": "ADMIN", "subject": None, "fullname": "Test User", "dob": None, "avatar": "", "token": "", "username": "admin","list_subjects_id": [],}
         # x = self.collection.insert_one(mydict)

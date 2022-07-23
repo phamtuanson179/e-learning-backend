@@ -11,7 +11,12 @@ class SubjectUtil:
             time = subject["time"],
             amount_question= subject["amount_question"],
             min_correct_question_to_pass=subject["min_correct_question_to_pass"],
-            generate_exam_type=subject["generate_exam_type"]
+            image= subject['image']
         )
+
+    def format_subject_for_update(subject):
+        if hasattr(subject, 'id'):
+            delattr(subject,'id')
+        return subject
 
     

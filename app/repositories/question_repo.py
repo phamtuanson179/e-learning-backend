@@ -1,4 +1,5 @@
-from app.utils.QuestionUtil import QuestionUtil
+from app.utils.question_util import QuestionUtil
+from app.repositories.subject_repo import SubjectRepo
 from app.models.Question import Question
 from app.models.Answer import Answer
 from bson.objectid import ObjectId
@@ -14,11 +15,10 @@ class QuestionRepo(BaseRepo):
         self.subcollection = self.mydb["subjects"]
     
     def create_question(self, question: Question):
-            new_ques = jsonable_encoder(question.__dict__)
-            res = self.collection.insert_one(new_ques)
+        new_ques = jsonable_encoder(question.__dict__)
+        res = self.collection.insert_one(new_ques)
+        return res
 
-            return res
-    
     def get_all_question(self):
         res = list(self.collection.find({}))
         list1 = [QuestionUtil.format_question(response) for response in res]
@@ -50,10 +50,13 @@ class QuestionRepo(BaseRepo):
         list1 = [QuestionUtil.format_question(response) for response in res]
         return list1
 
-    def get_question_random(self, id_subject: str):
-        res = list(self.collection.find({"subject_id": id_subject}))
-        subj = self.subcollection.find_one({"id": id_subject})
-        num = int(subj['amount_question'])
-        list1 = [QuestionUtil.format_question(response) for response in res]
-        list2 = random.sample(list1, num)
-        return list2
+    def get_question_random(self, subject_id: str):
+        list_questions = list(self.collection.find({"subject_id": subject_id}))
+        subject = SubjectRepo().get_subject_by_id(subject_id)
+        amount_question = subject.amount_question
+
+        list_format_questions = []
+        for question in list_questions:
+            list_format_questions.append(QuestionUtil.format_question(question))
+        list_random_questions = random.sample(list_format_questions, amount_question)
+        return list_random_questions

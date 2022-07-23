@@ -1,5 +1,5 @@
 from app.configs.Config import ProjectConfig
-from app.utils.TimeUtil import TimeUtil
+from app.utils.time_util import TimeUtil
 from app.utils.common_util import CommonUtil
 from . import *
 from app.exceptions.RequestException import RequestException

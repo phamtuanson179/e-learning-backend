@@ -3,19 +3,34 @@ from app.models.Auth import AccessToken
 
 class UserUtil:
 
-    # def format_info_user(user) -> User:
-    #     return User(
-    #         id=str(user["_id"]),
-    #         email=user["email"],
-    #         password=user["password"],
-    #         role=user["role"],
-    #         list_subjects_id=user["list_subjects_id"],
-    #         fullname=user["fullname"],
-    #         dob=user["dob"],
-    #         avatar=user["avatar"],
-    #         token=user["token"],
-    #         username=user["username"]
-    #     )
+    def format_info_user(user) -> User:
+        return User(
+            id=str(user["_id"]),
+            email=user["email"],
+            role=user["role"],
+            list_subjects_id=user["list_subjects_id"],
+            fullname=user["fullname"],
+            dob=user["dob"],
+            avatar=user["avatar"],
+            username=user["username"]
+        )
+
+    
+    def format_user_for_update(user):
+        if hasattr(user, 'password'):
+            delattr(user,'password')
+        if hasattr(user, 'token'):
+            delattr(user,'token')
+        if hasattr(user, 'id'):
+            delattr(user,'id')
+        return user
+
+    def format_user_for_get(user):
+        if hasattr(user, 'password'):
+            delattr(user,'password')
+        if hasattr(user, 'token'):
+            delattr(user,'token')
+        return user
 
     def format_token(user) -> AccessToken:
         return AccessToken(

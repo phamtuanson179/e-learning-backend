@@ -1,4 +1,5 @@
 from re import U
+from app.utils.user_util import UserUtil
 import jwt
 from datetime import datetime
 
@@ -7,7 +8,6 @@ from app.services.user_service import UserService
 from app.exceptions.CredentialException import CredentialException
 from app.utils.auth_util import AuthUtil
 from app.configs.Config import AuthConfig
-from app.utils import EmailUtil
 import string, random
 
 
@@ -20,7 +20,7 @@ class AuthService:
     async def authenticate_user(self, username: str, password: str):
         try:
             user = self.repo.get_user_by_username(username)
-            # print(user)
+            print(username,password,user)
             if not AuthUtil.verify_password(password, user.password):
                 raise CredentialException(message="UNAUTHORIZED")
         except Exception as e:
@@ -32,6 +32,7 @@ class AuthService:
         return {"access_token": access_token, "token_type": "bearer"}
 
     def validate_token(self, token: str):
+        print(token)
         try:
             data = AuthUtil.decode_token(token)
             username: str = data["username"]
@@ -66,19 +67,12 @@ class AuthService:
             username = decoded_token["username"]
             user = self.repo.get_user_by_username(username)
 
-            print(user)
             if not user:
                 raise CredentialException(message="Lỗi hệ thống")
             else:
-                if hasattr(user, 'password'):
-                    delattr(user,'password')
-                if hasattr(user, 'token'):
-                    delattr(user,'token')
-                return user
+                return UserUtil.format_user_for_get(user)
         except Exception as e:
             raise CredentialException(message="Lỗi hệ thống")
-            
-    
 
     def change_password(self, email: str, password: str):
         access_token = AuthUtil.create_access_token(email)

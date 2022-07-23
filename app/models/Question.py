@@ -1,4 +1,6 @@
+import numbers
 from typing import Optional, List
+from app.constants.common import QUESTION_TYPE
 from pydantic import BaseModel
 
 from app.models.Answer import Answer
@@ -9,14 +11,16 @@ from app.models.Answer import Answer
 #     url_file: Optional[str] = None
 
 class QuestionCreate(BaseModel):
-    type: int
     title: str
     subject_id: str
     url_file: Optional[str] = None
+    type: str = QUESTION_TYPE.ONE_CORRECT_ANSWER
     answers: List[Answer]
 
 class Question(QuestionCreate):
     id: str
 
+class QuestionHaveAnswer(Question):
+    user_answers: List[int]
 
 

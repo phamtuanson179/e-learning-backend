@@ -11,8 +11,10 @@ class SubjectCreate(BaseModel):
     time: int
     amount_question: int
     min_correct_question_to_pass: int
-    generate_exam_type: str = GENERATE_EXAM_TYPE.ORDER
+    image:str
 
 class Subject(SubjectCreate):
     id: str
-   
+
+class SubjectUpdate(SubjectCreate):
+   pass

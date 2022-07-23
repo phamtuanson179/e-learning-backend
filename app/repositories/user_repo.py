@@ -24,8 +24,15 @@ class UserRepo(BaseRepo):
         admins = list(self.collection.find({"role": RoleConfig.ROLE_ADMIN}))
         list_admins = []
         for record in admins:
-            list_admins.append(UserUtil.format_info_user(record))
+            list_admins.append(UserUtil.format_user(record))
         return list_admins
+    
+    def get_all_user(self):
+        users = list(self.collection.find({}))
+        formated_users = []
+        for user in users:
+            formated_users.append(UserUtil.format_info_user(user))
+        return formated_users
 
     def get_all_super_admin(self):
         admins = list(self.collection.find({"role": RoleConfig.ROLE_SUPERADMIN}))
@@ -33,6 +40,12 @@ class UserRepo(BaseRepo):
         for record in admins:
             list_super_admins.append(UserUtil.format_info_user(record))
         return list_super_admins
+    
+    def get_user_by_id(self,id:str):
+        user = self.collection.find_one({"_id":ObjectId(id)})
+        if not user:
+            return None
+        return UserUtil.format_info_user(user)
 
     def get_info_user(self, username):
         users = list(self.collection.find({"username": username}))
@@ -63,6 +76,7 @@ class UserRepo(BaseRepo):
 
     def get_user_by_username(self, username):
         user = self.collection.find_one({"username": username})
+        print("user",user)
         if not user:
             return None
         else:
@@ -100,5 +114,5 @@ class UserRepo(BaseRepo):
         return res
 
     def update_user(self,id:str, user: User):
-        res = self.collection.update_one({"_id":ObjectId(id)}, { "$set": user.__dict__})
+        res = self.collection.update_one({"_id":ObjectId(id)}, { "$set": UserUtil.format_user_for_update(user).__dict__})
         return res

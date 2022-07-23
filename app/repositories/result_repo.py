@@ -13,7 +13,6 @@ class ResultRepo(BaseRepo):
 
     def get_exam_history(self, user_id, subject_id):
         res = self.collection.find({"user_id": user_id, "subject_id": subject_id})
-        print(res)
         list_result = []
         for result in res:
             list_result.append(ResultUtil.format_result(result))
@@ -25,11 +24,8 @@ class ResultRepo(BaseRepo):
             {"$group": {"_id": '$user_id',"user_id": { "$first": "$user_id" }, "subject_id": { "$first": "$subject_id" }, 'point': {"$max": '$point'}, "time": { "$first": "$time"}, "max_point": { "$first": "$max_point"}, "is_pass": { "$first": "$is_pass"}}},
             {"$sort": {'point': -1, 'time': 1}}
         ])
-        # res = jsonable_encoder(res.__dict__)
         list_result = []
-        # print(res.__dict__)
         for result in res:
-            # print(res)
             list_result.append(ResultUtil.format_result_2(result))
         return list_result
 
@@ -47,14 +43,12 @@ class ResultRepo(BaseRepo):
             if(result["_id"] == user_id):
                 user_rank.update(ResultUtil.format_result_2(result))
                 user_rank.update({'rank': str(index+1)})
-                # print(user_rank)
-                # print(user_rank['rank'])
             index += 1
         list_result = list_res[:3]
         list_result.append(user_rank)
         return list_result
 
-    def save_result(self, testResult: Result):
-        saveResult = jsonable_encoder(testResult.__dict__)
-        res = self.collection.insert_one(saveResult)
+    def save_result(self, result: Result):
+        converted_result = jsonable_encoder(result.__dict__)
+        self.collection.insert_one(converted_result)
         return 'Saved Successfully'

@@ -9,7 +9,7 @@ from app.repositories.exam_repo import ExamRepo
 from app.models.User import UserCreate, User
 from app.exceptions.CredentialException import CredentialException
 from app.utils.auth_util import AuthUtil
-from app.utils.TimeUtil import TimeUtil
+from app.utils.time_util import TimeUtil
 from app.configs.Config import RoleConfig
 from app.utils.user_util import UserUtil
 from fastapi.responses import FileResponse
@@ -24,11 +24,12 @@ class UserService:
 
     def check_admin_permission(self, token: str):
         data = AuthUtil.decode_token(token)
-        email: str = data["email"]
-        user_call_api = self.repo.get_user_by_email(email)
+        username: str = data["username"]
+        user_call_api = self.repo.get_user_by_username(username)
+        print("user_call_api",user_call_api)
         if not user_call_api:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
-        if(user_call_api.role == RoleConfig.ROLE_ADMIN or user_call_api.role == RoleConfig.ROLE_SUPERADMIN):
+        if(user_call_api.role == ROLE.ADMIN):
             return True
         else:
             return False
@@ -36,8 +37,9 @@ class UserService:
     def is_admin(self, token: str):
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
-        cur_user = self.repo.get_token_by_username(username)
-        
+        cur_user = self.repo.get_user_by_username(username)
+        # print(cur_user)
+
         if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
         if(cur_user.role == ROLE.ADMIN):
@@ -82,8 +84,12 @@ class UserService:
         list_super_admins = self.repo.get_all_super_admin()
         return list_super_admins
 
-    def get_user(self, username: str):
-        _u = self.repo.get_info_user(username)
+    def get_all_user(self):
+        users = self.repo.get_all_user()
+        return users
+
+    def get_user(self, email: str):
+        _u = self.repo.get_info_user(email)
         if not _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User not exists")
         return _u
@@ -103,6 +109,16 @@ class UserService:
             if not self.check_admin_permission(token):
                 raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
         res = self.repo.update_user(info)
+        return "Update success"
+
+    def update_me(self, token: str, user: User):
+        data = AuthUtil.decode_token(token)
+        print(data,user)
+        username: str = data["username"]
+        if(username != user.username):
+            if not self.check_admin_permission(token):
+                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        res = self.repo.update_user(user.id,user)
         return "Update success"
 
     async def upload_file(self, file: UploadFile):

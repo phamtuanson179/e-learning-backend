@@ -4,7 +4,7 @@ from app.repositories.result_repo import ResultRepo
 from app.models.Result import Result
 from app.exceptions.RequestException import RequestException
 from app.utils.auth_util import AuthUtil
-from app.utils.TimeUtil import TimeUtil
+from app.utils.time_util import TimeUtil
 from app.services.user_service import UserService
 
 class ExamService:
@@ -41,24 +41,17 @@ class ExamService:
 
     def get_shortcut_exam_ranking(self, exam_id: str, token: str):
         data = AuthUtil.decode_token(token)
-        # print(data)
         user = UserService().get_user(data["username"])
-        # print(user)
         list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.id)
         return list_result
 
-    def save_result(self, new_result: Result, token: str):
+    def save_result(self, new_result: Result):
         try:
-            # exam = ExamRepo().get_exam(new_result.subject_id)
-            # data = AuthUtil.decode_token(token)
-            # user = UserService().get_user(data["email"])
-            print(new_result)
-            result = ResultRepo().save_result(new_result)
+            ResultRepo().save_result(new_result)
             return "Save result success"
         except Exception as e:
             print(e)
             raise RequestException(message="save results fail")
 
-   
     def update_exam(self, exam):
         pass
