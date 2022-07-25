@@ -19,9 +19,9 @@ async def get_subject_by_di(id: str, token: str = Depends(oauth2_scheme)):
         return res
 
 @router.get("/get-subject-for-user")
-async def get_subject_for_user(id: str, token: str = Depends(oauth2_scheme)):
+async def get_subject_for_user(token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
-        res = SubjectService().get_subject_for_user(id)
+        res = SubjectService().get_subject_for_user(token)
         return res
 
 @router.get("/get-subject-for-me")

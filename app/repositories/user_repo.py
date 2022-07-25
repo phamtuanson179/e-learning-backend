@@ -46,6 +46,12 @@ class UserRepo(BaseRepo):
         if not user:
             return None
         return UserUtil.format_info_user(user)
+    
+    def get_user_by_token(self, token: str):
+        user = self.mydb.get_collection("users").find_one({"token": token})
+        if not user:
+            return None
+        return UserUtil.format_info_user(user)
 
     def get_info_user(self, username):
         users = list(self.collection.find({"username": username}))

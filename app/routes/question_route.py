@@ -51,3 +51,9 @@ async def get_question_random(id: str, token: str = Depends(oauth2_scheme)):
         res = QuestionService().get_question_random(id)
         return res
 
+@router.get('/get-question-for-user')
+async def get_question_for_user(token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = QuestionService().get_question_for_user(token)
+        return res
+

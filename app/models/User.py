@@ -9,7 +9,7 @@ class UserCreate(BaseModel):
     email: str
     role: str
     fullname: str
-    dob: int
+    dob: str
     list_subjects_id: Optional[List[str]]
     avatar: Optional[str] 
     token: Optional[str]

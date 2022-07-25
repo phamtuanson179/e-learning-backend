@@ -60,11 +60,13 @@ class UserService:
             return False
 
     def create_user(self, new_user: UserCreate):
+        # print(new_user['username'])
         _u = self.repo.get_user_by_username(new_user.username)
         if _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User already exists")
         hash_password = AuthUtil.hash_password(new_user.password)
         new_user.password = hash_password
+        # print()
         # user = User(email=new_user.email, password= hash_password, role=new_user.role, subject=new_user.subject, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
         # formated_user = UserUtil.format_user(new_user)
         res = self.repo.create_user(new_user)

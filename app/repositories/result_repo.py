@@ -1,7 +1,13 @@
 from app.models.Result import Result
 from app.utils.result_util import ResultUtil
+from app.utils.subject_util import SubjectUtil
+
 from . import *
 from fastapi.encoders import jsonable_encoder
+from app.repositories.subject_repo import SubjectRepo, UserRepo
+from app.constants.common import ROLE
+from bson.objectid import ObjectId
+
 
 
 class ResultRepo(BaseRepo):
@@ -10,6 +16,31 @@ class ResultRepo(BaseRepo):
         super().__init__()
         self.collection = self.mydb[collection]
         self.subcollection = self.mydb["users"]
+        self.subjcollection = self.mydb["subjects"]
+
+    def get_exam_for_user(self, token):
+        # user = UserRepo.get_user_by_token(self, token)
+        # # print(user.role)
+        # result_subject = {}
+        # if user.role == ROLE.ADMIN:
+        #     subjects = [SubjectUtil.format_subject(subj) for subj in self.subjcollection.find({})]
+        #     for subject in subjects:
+        #         results = [ResultUtil.format_result_2(result) for result in self.collection.find({"subject_id": subject.id})]
+        #         result_subject.update({subject_id: results})
+
+        # elif user.role == ROLE.TEACHER or user.role == ROLE.STUDENT: 
+        #     for subject_id in user.list_subjects_id:
+        #         # results = list(self.collection.find({"subject_id": subject_id}))
+        #         # print(results)
+
+        #         results = [ResultUtil.format_result_2(result) for result in self.collection.find({"subject_id": subject_id})]
+        #         result_subject.update({subject_id: results})
+    
+        # if not result_subject:
+        #     return None
+        # else:
+        #     return result_subject
+        pass
 
     def get_exam_history(self, user_id, subject_id):
         res = self.collection.find({"user_id": user_id, "subject_id": subject_id})
@@ -28,6 +59,7 @@ class ResultRepo(BaseRepo):
         for result in res:
             list_result.append(ResultUtil.format_result_2(result))
         return list_result
+
 
     def get_shortcut_exam_ranking(self, exam_id, user_id):
         res = self.collection.aggregate([

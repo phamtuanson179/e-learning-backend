@@ -1,18 +1,9 @@
 import uvicorn
 from app.services.user_service import UserService
+from app.models.User import UserCreate
 
 if __name__ == "__main__":
-    # new_user = {
-    #     "username": "admin",
-    #     "password": "admin",
-    #     "email": "admin@gmail.com",
-    #     "role": "ADMIN",
-    #     "fullname": "admin",
-    #     "dob": "11/01/2011",
-    #     "list_subjects_id": [],
-    #     "avatar": 'string',
-
-    # }
+    # new_user = UserCreate(username="admin", password="admin", email="admin@example.com",role="ADMIN", fullname="admin", dob="2000-01-01", list_subjects_id=[], avatar="string", token="string")
     # new_user = UserService().create_user(new_user)
 
 

@@ -17,4 +17,10 @@ async def get_exams_for_subject(subject: str, token: str = Depends(oauth2_scheme
     if AuthService().validate_token(token):
         res = ExamService().get_exams_for_subject(subject)
         return res
+
+@router.get("/get-exam-for-user")
+async def get_exams_for_user(token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_exam_for_user(token)
+        return res
         

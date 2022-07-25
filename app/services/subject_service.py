@@ -35,10 +35,11 @@ class SubjectService:
             raise RequestException(message="subject does not exist!")
         return subject
 
-    def get_subject_for_user(self, user_id: str):
+    def get_subject_for_user(self, token: str):
         try:
-            subject = self.repo.get_subject_by_id(user_id)
-        except:
+            subject = self.repo.get_subject_for_user(token)
+        except Exception as e:
+            print(e)
             raise RequestException(message="Get subjects fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")

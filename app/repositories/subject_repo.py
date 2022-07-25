@@ -3,6 +3,7 @@ from app.utils.subject_util import SubjectUtil
 from app.repositories.user_repo import UserRepo
 from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
 from bson.objectid import ObjectId
+from app.constants.common import ROLE
 from . import *
 
 
@@ -26,12 +27,17 @@ class SubjectRepo(BaseRepo):
         else:
             return SubjectUtil.format_subject(subject)
 
-    def get_subject_for_user(self, user_id: str):
-        user = UserRepo.get_user_by_id(id)
+    def get_subject_for_user(self, token: str):
         subjects = []
-        for subject_id in user.list_subjects_id:
-            subject = self.collection.find_one({"_id": ObjectId(subject_id)})
-            subjects.append(SubjectUtil.format_subject(subject))
+        user = UserRepo.get_user_by_token(self, token)
+        if user.role == ROLE.ADMIN:
+            subjects = self.get_all_subject()
+            
+        elif user.role == ROLE.TEACHER or user.role == ROLE.STUDENT:
+            for subject_id in user.list_subjects_id:
+                subject = self.collection.find_one({"_id": ObjectId(subject_id)})
+                subjects.append(SubjectUtil.format_subject(subject))
+
         if not subjects:
             return None
         else:

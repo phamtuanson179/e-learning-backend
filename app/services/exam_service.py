@@ -52,6 +52,14 @@ class ExamService:
         except Exception as e:
             print(e)
             raise RequestException(message="save results fail")
+    
+    def get_exam_for_user(self, token: str):
+        try:
+            res = ResultRepo().get_exam_for_user(token)
+            return res
+        except Exception as e:
+            print(e)
+            raise RequestException(message="get results fail")
 
     def update_exam(self, exam):
         pass
