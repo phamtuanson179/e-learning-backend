@@ -20,6 +20,9 @@ class QuestionCreate(BaseModel):
 class Question(QuestionCreate):
     id: str
 
+class QuestionUpdate(QuestionCreate):
+    pass
+
 class QuestionHaveAnswer(Question):
     user_answers: List[int]
 

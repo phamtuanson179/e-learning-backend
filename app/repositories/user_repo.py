@@ -1,5 +1,9 @@
 
 # from time import clock_getres
+from pickle import FALSE
+from app.constants.common import ROLE
+from app.models.User import UserCreate, UserUpdate
+from app.utils.auth_util import AuthUtil
 from app.utils.user_util import UserUtil, User
 from . import *
 from app.configs.Config import RoleConfig
@@ -12,12 +16,12 @@ class UserRepo(BaseRepo):
         super().__init__()
         self.collection = self.mydb[collection]
 
-    def create_user(self, user: User):
+    def create_user(self, user: UserCreate):
         res = self.collection.insert_one(user.__dict__)
         return res
 
-    def delete_user(self, email: str):
-        res = self.collection.delete_one({"email": email})
+    def delete_user(self, user_id: str):
+        res = self.collection.delete_one({"_id":ObjectId(user_id)})
         return res
 
     def get_all_admin(self):
@@ -29,6 +33,7 @@ class UserRepo(BaseRepo):
     
     def get_all_user(self):
         users = list(self.collection.find({}))
+        print(users)
         formated_users = []
         for user in users:
             formated_users.append(UserUtil.format_info_user(user))
@@ -71,18 +76,14 @@ class UserRepo(BaseRepo):
             return UserUtil.format_token(user)
         
     def get_user_by_email(self, email):
-        users = list(self.collection.find({"email": email}))
-        count = 0
-        for record in users:
-            count += 1
-        if count < 1:
+        user = self.collection.find_one({"email": email})
+        if not user:
             return None
         else:
-            return UserUtil.format_user(users[0])
+            return UserUtil.format_user(user)
 
     def get_user_by_username(self, username):
         user = self.collection.find_one({"username": username})
-        print("user",user)
         if not user:
             return None
         else:
@@ -119,6 +120,41 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, {"$set": value})
         return res
 
-    def update_user(self,id:str, user: User):
-        res = self.collection.update_one({"_id":ObjectId(id)}, { "$set": UserUtil.format_user_for_update(user).__dict__})
+    def update_user(self,user_id:str, user: UserUpdate):
+        res = self.collection.update_one({"_id":ObjectId(user_id)}, { "$set": UserUtil.format_user_for_update(user).__dict__})
         return res
+
+    def get_user_for_user(self, token: str):
+        data = AuthUtil.decode_token(token)
+        username = data['username']
+        user = UserRepo().get_user_by_username(username)
+
+        if not user:
+            return None
+        else:
+            list_user = [] 
+            datas = list(self.collection.find({}))
+            # print(datas)
+            
+            if user.role == ROLE.ADMIN:
+                for data in datas:
+                    list_user.append(UserUtil.format_user_for_get(UserUtil.format_user(data)))
+            elif user.role == ROLE.TEACHER:  
+                print (user.list_subjects_id)
+                    # print (user['list_subjects_id'])
+                for data in datas:
+                    flag= False
+                    for subject_id in user.list_subjects_id:
+                        print(subject_id,data['list_subjects_id'])
+                        if(subject_id in data['list_subjects_id']):
+                            print('a')
+                            flag = True
+                            break
+                    if flag == True:
+                        list_user.append(UserUtil.format_user_for_get(UserUtil.format_user(data)))    
+            else:
+                return None
+            if not list_user:
+                return None
+            else:
+                return list_user

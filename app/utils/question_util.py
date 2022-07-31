@@ -14,7 +14,7 @@ class QuestionUtil:
 
         )
 
-    def format_question_for_update(question) -> Question:
+    def format_question_for_update(question):
         if hasattr(question, 'id'):
             delattr(question,'id')
         return question

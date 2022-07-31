@@ -1,5 +1,5 @@
 from app.repositories.question_repo import QuestionRepo
-from app.models.Question import Question
+from app.models.Question import Question, QuestionUpdate
 from app.exceptions.RequestException import RequestException
 
 class QuestionService:
@@ -28,7 +28,7 @@ class QuestionService:
         except: 
             raise RequestException(message="get question failed")
         
-    def update_question(self, id: str, question: Question):
+    def update_question(self, id: str, question: QuestionUpdate):
         try:
             self.repo.update_question(id,question)
         except:

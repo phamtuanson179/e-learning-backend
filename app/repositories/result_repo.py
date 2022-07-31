@@ -1,4 +1,5 @@
 from app.models.Result import Result
+from app.utils.auth_util import AuthUtil
 from app.utils.result_util import ResultUtil
 from app.utils.subject_util import SubjectUtil
 
@@ -18,29 +19,30 @@ class ResultRepo(BaseRepo):
         self.subcollection = self.mydb["users"]
         self.subjcollection = self.mydb["subjects"]
 
-    def get_exam_for_user(self, token):
-        # user = UserRepo.get_user_by_token(self, token)
-        # # print(user.role)
-        # result_subject = {}
-        # if user.role == ROLE.ADMIN:
-        #     subjects = [SubjectUtil.format_subject(subj) for subj in self.subjcollection.find({})]
-        #     for subject in subjects:
-        #         results = [ResultUtil.format_result_2(result) for result in self.collection.find({"subject_id": subject.id})]
-        #         result_subject.update({subject_id: results})
-
-        # elif user.role == ROLE.TEACHER or user.role == ROLE.STUDENT: 
-        #     for subject_id in user.list_subjects_id:
-        #         # results = list(self.collection.find({"subject_id": subject_id}))
-        #         # print(results)
-
-        #         results = [ResultUtil.format_result_2(result) for result in self.collection.find({"subject_id": subject_id})]
-        #         result_subject.update({subject_id: results})
-    
-        # if not result_subject:
-        #     return None
-        # else:
-        #     return result_subject
-        pass
+    def get_result_for_user(self, token):
+        data = AuthUtil.decode_token(token)
+        username = data['username']
+        user = UserRepo().get_user_by_username(username)
+        
+        if not user:
+            return None
+        else:
+            list_result = []
+            if user.role == ROLE.ADMIN:
+                data = self.collection.find({})
+                for result in data:
+                    list_result.append(ResultUtil.format_result(result))
+            elif user.role == ROLE.TEACHER:  
+                for subject_id in user.list_subjects_id:
+                    data = self.collection.find({'subject_id':subject_id})
+                    for result in data:
+                        list_result.append(ResultUtil.format_result(result))
+            else:
+                return None
+            if not list_result:
+                return None
+            else:
+                return list_result
 
     def get_exam_history(self, user_id, subject_id):
         res = self.collection.find({"user_id": user_id, "subject_id": subject_id})

@@ -12,7 +12,7 @@ class ResultUtil:
             time=result["time"],
             is_pass=result["is_pass"],
             questions=result["questions"],
-            answers=result["answers"]
+            created_at = result["created_at"]
         )
     
     

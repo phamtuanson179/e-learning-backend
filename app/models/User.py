@@ -16,3 +16,9 @@ class UserCreate(BaseModel):
 
 class User(UserCreate):
     id: str
+
+class UserUpdate(BaseModel):
+    email: str
+    fullname: str
+    dob: int
+    avatar: Optional[str] 

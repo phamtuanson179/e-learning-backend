@@ -5,7 +5,7 @@ class ROLE:
 
 class DB:
     URL = 'mongodb://localhost:27017'
-    NAME = 'e-learning-app-2'
+    NAME = 'e-learning-app'
 
 class AUTH:
     SECRET_KEY = 'elearning_techpro'

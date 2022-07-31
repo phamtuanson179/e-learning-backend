@@ -3,7 +3,7 @@ from app.models.Auth import AccessToken
 
 class UserUtil:
 
-    def format_info_user(user) -> User:
+    def format_info_user(user)-> User:
         return User(
             id=str(user["_id"]),
             email=user["email"],
@@ -12,10 +12,27 @@ class UserUtil:
             fullname=user["fullname"],
             dob=user["dob"],
             avatar=user["avatar"],
-            username=user["username"]
+            username=user["username"],
         )
 
     
+
+    
+    def format_user_for_update_me(user):
+        if hasattr(user, 'password'):
+            delattr(user,'password')
+        if hasattr(user, 'token'):
+            delattr(user,'token')
+        if hasattr(user, 'id'):
+            delattr(user,'id')
+        if hasattr(user, 'username'):
+            delattr(user,'username')
+        if hasattr(user, 'role'):
+            delattr(user,'role')
+        if hasattr(user, 'list_subjects_id'):
+            delattr(user,'list_subjects_id')
+        return user
+
     def format_user_for_update(user):
         if hasattr(user, 'password'):
             delattr(user,'password')
@@ -23,8 +40,10 @@ class UserUtil:
             delattr(user,'token')
         if hasattr(user, 'id'):
             delattr(user,'id')
+        if hasattr(user, 'username'):
+            delattr(user,'username')
         return user
-
+        
     def format_user_for_get(user):
         if hasattr(user, 'password'):
             delattr(user,'password')

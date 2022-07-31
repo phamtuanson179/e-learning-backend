@@ -6,7 +6,7 @@ from app.models.Question import Question, QuestionHaveAnswer
 
 
 class ResultCreate(BaseModel):
-    created_at: int
+    created_at:Optional[int] 
     subject_id: str 
     point: int
     is_pass: bool

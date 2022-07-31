@@ -28,3 +28,9 @@ async def get_shortcut_exam_ranking(exam_id: str, token: str = Depends(oauth2_sc
     if AuthService().validate_token(token):
         res = ExamService().get_shortcut_exam_ranking(exam_id, token)
         return res
+
+@router.get("/get-result-for-user")
+async def get_result_for_user(token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_result_for_user(token)
+        return res

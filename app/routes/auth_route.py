@@ -15,7 +15,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/about-me")
 async def about_me(token: str = Depends(oauth2_scheme)):
-    print(token)
     if AuthService().validate_token(token):
         res = AuthService().about_me(token)
         return res

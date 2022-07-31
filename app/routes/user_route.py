@@ -4,7 +4,7 @@ from app.constants.common import ROLE
 from app.exceptions import CredentialException
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
-from app.models.User import UserCreate, User
+from app.models.User import UserCreate, User, UserUpdate
 from app.models.User import User
 from app.routes.auth_route import oauth2_scheme
 import starlette.status
@@ -39,21 +39,28 @@ async def create_user(new_user: UserCreate, token: str = Depends(oauth2_scheme))
 
 
 @router.put("/update")
-async def update_user(data: User, token: str = Depends(oauth2_scheme)):
+async def update_user(id:str,data: UserCreate, token: str = Depends(oauth2_scheme)):
+    print(data)
     if AuthService().validate_token(token):
-        res = UserService().update_user(data, token)
+        res = UserService().update_user(id,data)
         return res
 
 @router.put("/update-me")
-async def update_user(data: User, token: str = Depends(oauth2_scheme)):
+async def update_user(data: UserUpdate, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
         res = UserService().update_me(token,data)
         return res
 
 @router.delete("/delete")
-async def delete_user(email: str, token: str = Depends(oauth2_scheme)):
+async def delete_user(id: str, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
         if not UserService().check_admin_permission(token):
             raise CredentialException(status_code=status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        res = UserService().delete_user(email)
+        res = UserService().delete_user(id)
+        return res
+
+@router.get('/get-user-for-user')
+async def get_user_for_user(token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = UserService().get_user_for_user(token)
         return res

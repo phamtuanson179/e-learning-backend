@@ -1,3 +1,4 @@
+from app.exceptions import RequestException
 from fastapi import UploadFile
 import starlette.status
 import aiofiles
@@ -6,7 +7,7 @@ from app.configs.Config import AuthConfig
 from app.constants.common import ROLE
 from app.repositories.user_repo import UserRepo
 from app.repositories.exam_repo import ExamRepo
-from app.models.User import UserCreate, User
+from app.models.User import UserCreate, User, UserUpdate
 from app.exceptions.CredentialException import CredentialException
 from app.utils.auth_util import AuthUtil
 from app.utils.time_util import TimeUtil
@@ -26,7 +27,6 @@ class UserService:
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
         user_call_api = self.repo.get_user_by_username(username)
-        print("user_call_api",user_call_api)
         if not user_call_api:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
         if(user_call_api.role == ROLE.ADMIN):
@@ -38,7 +38,6 @@ class UserService:
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
         cur_user = self.repo.get_user_by_username(username)
-        # print(cur_user)
 
         if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
@@ -51,7 +50,6 @@ class UserService:
         data = AuthUtil.decode_token(token)
         username: str = data["username"]
         cur_user = self.repo.get_token_by_username(username)
-        print(cur_user)
         if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
         if(cur_user.role == ROLE.TEACHER):
@@ -60,20 +58,16 @@ class UserService:
             return False
 
     def create_user(self, new_user: UserCreate):
-        # print(new_user['username'])
         _u = self.repo.get_user_by_username(new_user.username)
         if _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User already exists")
-        hash_password = AuthUtil.hash_password(new_user.password)
+        hash_password = AuthUtil.hash_password('1')
         new_user.password = hash_password
-        # print()
-        # user = User(email=new_user.email, password= hash_password, role=new_user.role, subject=new_user.subject, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
-        # formated_user = UserUtil.format_user(new_user)
         res = self.repo.create_user(new_user)
         return "Sucessfully created!"
 
-    def delete_user(self, email: str):
-        res = self.repo.delete_user(email)
+    def delete_user(self, user_id: str):
+        res = self.repo.delete_user(user_id)
         if not res:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error")
         return "Sucessfully deleted!"
@@ -104,23 +98,17 @@ class UserService:
         res = self.repo.update_admin(info)
         return "Update success"
 
-    def update_user(self, info: User, token: str):
-        data = AuthUtil.decode_token(token)
-        email: str = data["email"]
-        if(email != info.email):
-            if not self.check_admin_permission(token):
-                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        res = self.repo.update_user(info)
+    def update_user(self,user_id: str, user: UserCreate):
+        res = self.repo.update_user(user_id,user)
         return "Update success"
 
-    def update_me(self, token: str, user: User):
+    def update_me(self, token: str, userUpdate: UserUpdate):
         data = AuthUtil.decode_token(token)
-        print(data,user)
         username: str = data["username"]
-        if(username != user.username):
-            if not self.check_admin_permission(token):
-                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        res = self.repo.update_user(user.id,user)
+        user = self.repo.get_user_by_username(username)
+        if not self.check_admin_permission(token):
+            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        res = self.repo.update_user(user.id,userUpdate)
         return "Update success"
 
     async def upload_file(self, file: UploadFile):
@@ -142,3 +130,12 @@ class UserService:
             await out_file.write(content)
         os.remove(url_old_file)
         return path
+    
+    def get_user_for_user(self, token: str):
+        try: 
+            res = self.repo.get_user_for_user(token)
+            return res
+        except Exception as e: 
+            raise RequestException(message="get question failed")
+
+    
