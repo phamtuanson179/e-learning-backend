@@ -17,17 +17,17 @@ async def get_exam_history(user_id: str, subject_id: str, token: str = Depends(o
         res = ExamService().get_exam_history(user_id, subject_id)
         return res
 
-@router.get("/get-full-exam-ranking")
-async def get_full_exam_ranking(exam_id: str, token: str = Depends(oauth2_scheme)):
+@router.get("/get-full-result-ranking")
+async def get_full_exam_ranking(subject_id: str, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
-        res = ExamService().get_full_exam_ranking(exam_id)
+        res = ExamService().get_full_result_ranking(subject_id)
         return res
 
-@router.get("/get-shortcut-exam-ranking")
-async def get_shortcut_exam_ranking(exam_id: str, token: str = Depends(oauth2_scheme)):
-    if AuthService().validate_token(token):
-        res = ExamService().get_shortcut_exam_ranking(exam_id, token)
-        return res
+# @router.get("/get-shortcut-exam-ranking")
+# async def get_shortcut_exam_ranking(exam_id: str, token: str = Depends(oauth2_scheme)):
+#     if AuthService().validate_token(token):
+#         res = ExamService().get_shortcut_exam_ranking(exam_id, token)
+#         return res
 
 @router.get("/get-result-for-user")
 async def get_result_for_user(token: str = Depends(oauth2_scheme)):

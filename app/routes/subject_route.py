@@ -39,6 +39,7 @@ async def create_subject(subject: SubjectCreate, token: str = Depends(oauth2_sch
 @router.put("/update")
 async def update_subject(id: str, subject: SubjectUpdate, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
+        # print(101)
         res = SubjectService().update_subject(id,subject)
         return res
 

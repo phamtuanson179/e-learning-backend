@@ -17,3 +17,4 @@ class ResultCreate(BaseModel):
 
 class Result(ResultCreate):
     id: Optional[str] = None
+

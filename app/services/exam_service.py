@@ -35,15 +35,15 @@ class ExamService:
         list_history = ResultRepo().get_exam_history(user_id, subject_id)
         return list_history
 
-    def get_full_exam_ranking(self, exam_id: str):
-        list_result = ResultRepo().get_full_exam_ranking(exam_id)
+    def get_full_result_ranking(self, subject_id: str):
+        list_result = ResultRepo().get_full_result_ranking(subject_id)
         return list_result
 
-    def get_shortcut_exam_ranking(self, exam_id: str, token: str):
-        data = AuthUtil.decode_token(token)
-        user = UserService().get_user(data["username"])
-        list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.id)
-        return list_result
+    # def get_shortcut_exam_ranking(self, exam_id: str, token: str):
+    #     data = AuthUtil.decode_token(token)
+    #     user = UserService().get_user(data["username"])
+    #     list_result = ResultRepo().get_shortcut_exam_ranking(exam_id, user.id)
+    #     return list_result
 
     def save_result(self, new_result: Result):
         try:

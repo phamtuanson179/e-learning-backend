@@ -20,6 +20,8 @@ class AuthService:
     async def authenticate_user(self, username: str, password: str):
         try:
             user = self.repo.get_user_by_username(username)
+            # print(AuthUtil.pwd_context.hash(password))
+            # print(user.password)
             if not AuthUtil.verify_password(password, user.password):
                 raise CredentialException(message="UNAUTHORIZED")
         except Exception as e:

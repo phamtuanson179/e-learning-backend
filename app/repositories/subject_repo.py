@@ -4,6 +4,7 @@ from app.repositories.user_repo import UserRepo
 from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
 from bson.objectid import ObjectId
 from app.constants.common import ROLE
+from fastapi.encoders import jsonable_encoder
 from . import *
 
 
@@ -32,7 +33,7 @@ class SubjectRepo(BaseRepo):
         user = UserRepo.get_user_by_token(self, token)
         if user.role == ROLE.ADMIN:
             subjects = self.get_all_subject()
-            
+
         elif user.role == ROLE.TEACHER or user.role == ROLE.STUDENT:
             for subject_id in user.list_subjects_id:
                 subject = self.collection.find_one({"_id": ObjectId(subject_id)})
@@ -52,5 +53,9 @@ class SubjectRepo(BaseRepo):
         return res
 
     def update_subject(self, id:str,subject: SubjectUpdate):
-        res = self.collection.update_one({"_id": ObjectId(id)},{"$set": SubjectUtil.format_subject_for_update(subject).__dict__})
-        return res
+        try:
+            new_subj = jsonable_encoder(subject)
+            res = self.collection.find_one_and_update({"_id": ObjectId(id)},{"$set": new_subj})
+            return res
+        except Exception as e:
+            print(e)
