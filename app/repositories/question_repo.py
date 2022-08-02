@@ -87,6 +87,9 @@ class QuestionRepo(BaseRepo):
 
         list_format_questions = []
         for question in list_questions:
+            question['answers'] = random.sample(question['answers'], 4)
+            # return QuestionUtil.format_question(question)
             list_format_questions.append(QuestionUtil.format_question(question))
         list_random_questions = random.sample(list_format_questions, amount_question)
         return list_random_questions
+        # return 200
