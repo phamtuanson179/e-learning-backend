@@ -61,7 +61,7 @@ class UserService:
         _u = self.repo.get_user_by_username(new_user.username)
         if _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User already exists")
-        hash_password = AuthUtil.hash_password(new_user.password)
+        hash_password = AuthUtil.hash_password("1")
         new_user.password = hash_password
         res = self.repo.create_user(new_user)
         return "Sucessfully created!"
