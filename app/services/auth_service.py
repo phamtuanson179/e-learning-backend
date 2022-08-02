@@ -1,4 +1,5 @@
 from re import U
+from app.models.Auth import ChangePassword
 from app.utils.user_util import UserUtil
 import jwt
 from datetime import datetime
@@ -66,7 +67,6 @@ class AuthService:
             decoded_token = AuthUtil.decode_token(token)
             username = decoded_token["username"]
             user = self.repo.get_user_by_username(username)
-
             if not user:
                 raise CredentialException(message="Lỗi hệ thống")
             else:
@@ -74,13 +74,24 @@ class AuthService:
         except Exception as e:
             raise CredentialException(message="Lỗi hệ thống")
 
-    def change_password(self, email: str, password: str):
-        access_token = AuthUtil.create_access_token(email)
-        reset_token = self.repo.update_token(email, access_token)
-        hash_password = AuthUtil.hash_password(password)
-        reset_password = self.repo.update_password(email, hash_password)
-        return {"access_token": access_token, "hash_password": password}
+    def change_password(self, token:str, data:ChangePassword):
+        try: 
+            if data.new_password != data.repeat_new_password:
+                raise CredentialException(message="Lỗi hệ thống")
+            else:
+                decoded_token = AuthUtil.decode_token(token)
+                user = UserRepo().get_user_by_username(decoded_token['username'])
+                if not AuthUtil.verify_password(data.old_password, user.password):
+                    raise CredentialException(message="Lỗi hệ thống")
+                else: 
+                    new_hash_password = AuthUtil.hash_password(data.new_password)
+                    self.repo.update_password(user.username, new_hash_password)
+                    access_token = AuthUtil.create_access_token(user.username)
+                    self.repo.update_token(user.username, access_token)
+                    return {"access_token": access_token, "token_type": "bearer"}
 
+        except Exception as e:
+            raise CredentialException(message="Lỗi hệ thống")
     async def handle_forgot_password(self, email: str):
         # check user exist
         res = UserService().get_user(email)

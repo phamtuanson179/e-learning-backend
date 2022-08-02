@@ -1,7 +1,7 @@
 
 from app.utils.subject_util import SubjectUtil
 from app.repositories.user_repo import UserRepo
-from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
+from app.models.Subject import Subject, SubjectCreate
 from bson.objectid import ObjectId
 from app.constants.common import ROLE
 from fastapi.encoders import jsonable_encoder
@@ -52,10 +52,10 @@ class SubjectRepo(BaseRepo):
         res = self.collection.delete_one({"_id": ObjectId(id)})
         return res
 
-    def update_subject(self, id:str,subject: SubjectUpdate):
+    def update_subject(self, id:str,subject: SubjectCreate):
         try:
             new_subj = jsonable_encoder(subject)
-            res = self.collection.find_one_and_update({"_id": ObjectId(id)},{"$set": new_subj})
+            res = self.collection.update_one({"_id": ObjectId(id)},{"$set": new_subj})
             return res
         except Exception as e:
             print(e)

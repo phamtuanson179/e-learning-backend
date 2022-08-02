@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Header
 from app.services.auth_service import AuthService
 from app.services.subject_service import SubjectService
-from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
+from app.models.Subject import Subject, SubjectCreate
 from app.routes.auth_route import oauth2_scheme
 
 router = APIRouter(prefix="/subject")
@@ -37,7 +37,7 @@ async def create_subject(subject: SubjectCreate, token: str = Depends(oauth2_sch
         return res
 
 @router.put("/update")
-async def update_subject(id: str, subject: SubjectUpdate, token: str = Depends(oauth2_scheme)):
+async def update_subject(id: str, subject: SubjectCreate, token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
         # print(101)
         res = SubjectService().update_subject(id,subject)

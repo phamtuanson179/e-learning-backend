@@ -1,3 +1,4 @@
+from app.models.Auth import ChangePassword
 from fastapi import APIRouter
 
 from app.services.auth_service import AuthService
@@ -17,6 +18,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def about_me(token: str = Depends(oauth2_scheme)):
     if AuthService().validate_token(token):
         res = AuthService().about_me(token)
+        return res
+
+@router.post("/change-password")
+async def change_password(data:ChangePassword,token: str = Depends(oauth2_scheme)):
+    if AuthService().validate_token(token):
+        res = AuthService().change_password(token,data)
         return res
 
 # @router.post("/forgot-password")

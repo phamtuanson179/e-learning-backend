@@ -114,10 +114,8 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, { "$set": value})
         return res
 
-    def update_password(self, email, hash_password):
-        query = {"email": email}
-        value = {"password": hash_password}
-        res = self.collection.update_one(query, {"$set": value})
+    def update_password(self, username, hash_password):
+        res = self.collection.update_one({'username':username}, {"$set": {'password': hash_password}})
         return res
 
     def update_user(self,user_id:str, user: UserUpdate):

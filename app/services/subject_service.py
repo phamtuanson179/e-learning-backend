@@ -1,5 +1,5 @@
 from app.repositories.subject_repo import SubjectRepo
-from app.models.Subject import Subject, SubjectCreate, SubjectUpdate
+from app.models.Subject import Subject, SubjectCreate
 from app.exceptions.RequestException import RequestException
 from app.repositories.user_repo import UserRepo
 from app.utils.auth_util import AuthUtil
@@ -60,7 +60,7 @@ class SubjectService:
             raise RequestException(message="subject does not exist!")
         return list_subjects
 
-    def update_subject(self,id: str, subject: SubjectUpdate):
+    def update_subject(self,id: str, subject: SubjectCreate):
         try:
             self.repo.update_subject(id,subject)
         except:

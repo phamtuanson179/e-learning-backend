@@ -15,6 +15,6 @@ class ForgotPassword(BaseModel):
     email: str
 
 class ChangePassword(BaseModel):
-    curr_password: str
+    old_password: str
     new_password: str
-    confirm_password: str
+    repeat_new_password: str
